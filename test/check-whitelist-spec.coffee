@@ -10,6 +10,24 @@ describe 'CheckWhitelist', ->
       whitelistManager: @whitelistManager
 
   describe '->do', ->
+    describe 'when called without a toUuid', ->
+      beforeEach (done) ->
+        @whitelistManager.canSend.yields null, true
+        job =
+          metadata:
+            auth:
+              uuid: 'green-blue'
+              token: 'blue-purple'
+            fromUuid: 'dim-green'
+            responseId: 'yellow-green'
+        @sut.do job, (error, @newJob) => done error
+
+      it 'should get have the responseId', ->
+        expect(@newJob.metadata.responseId).to.equal 'yellow-green'
+
+      it 'should get have the status code of 422', ->
+        expect(@newJob.metadata.code).to.equal 422
+
     describe 'when called with a valid job', ->
       beforeEach (done) ->
         @whitelistManager.canSend.yields null, true

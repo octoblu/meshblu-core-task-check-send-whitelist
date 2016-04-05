@@ -8,6 +8,7 @@ class CheckWhitelist
   do: (job, callback) =>
     {toUuid, fromUuid, responseId, auth} = job.metadata
     fromUuid ?= auth.uuid
+    return @sendResponse responseId, 422, callback unless fromUuid? && toUuid?
     @whitelistManager.canSend {fromUuid, toUuid}, (error, verified) =>
       return @sendResponse responseId, 500, callback if error?
       return @sendResponse responseId, 403, callback unless verified
