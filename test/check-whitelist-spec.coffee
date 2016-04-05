@@ -130,3 +130,6 @@ describe 'CheckWhitelist', ->
 
       it 'should get have the status of Forbidden', ->
         expect(@newJob.metadata.status).to.equal http.STATUS_CODES[500]
+
+      it 'should set up the error: message', ->
+        expect(@newJob.metadata.error.message).to.equal 'black-n-black'

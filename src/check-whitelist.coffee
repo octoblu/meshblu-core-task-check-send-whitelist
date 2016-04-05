@@ -8,17 +8,21 @@ class CheckWhitelist
   do: (job, callback) =>
     {toUuid, fromUuid, responseId, auth} = job.metadata
     fromUuid ?= auth.uuid
-    return @sendResponse responseId, 422, callback unless fromUuid? && toUuid?
+    return @sendResponse responseId, 422, null, callback unless fromUuid? && toUuid?
     @whitelistManager.canSend {fromUuid, toUuid}, (error, verified) =>
-      return @sendResponse responseId, 500, callback if error?
-      return @sendResponse responseId, 403, callback unless verified
-      @sendResponse responseId, 204, callback
+      return @sendResponse responseId, 500, error, callback if error?
+      return @sendResponse responseId, 403, null, callback unless verified
+      @sendResponse responseId, 204, null, callback
 
-  sendResponse: (responseId, code, callback) =>
+  sendResponse: (responseId, code, error, callback) =>
+    if error?
+      errorHash = message: error.message
+
     callback null,
       metadata:
         responseId: responseId
         code: code
         status: http.STATUS_CODES[code]
+        error: errorHash
 
 module.exports = CheckWhitelist
