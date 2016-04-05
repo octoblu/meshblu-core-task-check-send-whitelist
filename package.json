@@ -1,10 +1,10 @@
 {
   "name": "meshblu-core-task-check-send-whitelist",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "meshblu-core-manager-whitelist": "^3.2.0"
+    "meshblu-core-manager-whitelist": "^3.5.2"
   },
   "devDependencies": {
     "chai": "^3.4.1",
